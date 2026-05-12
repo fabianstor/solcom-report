@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solcom · Status Report · Mayo 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0f1923;
+    --ink-2: #3a4a58;
+    --ink-3: #7a8fa0;
+    --paper: #f5f3ef;
+    --paper-2: #eceae4;
+    --paper-3: #e0ddd5;
+    --accent: #1a5c3a;
+    --accent-2: #2d8a59;
+    --accent-light: #e6f4ed;
+    --amber: #b5540a;
+    --amber-light: #fef3e8;
+    --blue: #1a3f6f;
+    --blue-light: #e8eff9;
+    --red: #922020;
+    --red-light: #faeaea;
+    --gold: #9a7a1a;
+    --gold-light: #faf6e8;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--ink);
+    color: white;
+    padding: 40px 48px 36px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 40px solid rgba(255,255,255,0.04);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: 80px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 30px solid rgba(255,255,255,0.03);
+  }
+  .header-tag {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .header-tag::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--accent-2);
+  }
+  .header-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 400;
+    letter-spacing: 0.02em;
+  }
+  .header-date {
+    position: absolute;
+    top: 40px;
+    right: 48px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    text-align: right;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── GREETING ── */
+  .greeting {
+    background: white;
+    padding: 28px 48px;
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .greeting p {
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--ink-2);
+  }
+  .greeting strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ── SECTION ── */
+  .section {
+    padding: 32px 48px;
+    border-bottom: 1px solid var(--paper-3);
+    background: white;
+  }
+  .section + .section { margin-top: 2px; }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: var(--paper-3);
+  }
+
+  /* ── STATS ROW ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-bottom: 0;
+    background: var(--paper-2);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .stat-card {
+    background: white;
+    padding: 20px 20px 18px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .stat-num.green { color: var(--accent); }
+  .stat-num.amber { color: var(--amber); }
+  .stat-num.blue  { color: var(--blue); }
+  .stat-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-wrap { margin: 24px 0 0; }
+  .progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .progress-title {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+  .progress-pct {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .progress-bar-bg {
+    height: 8px;
+    background: var(--paper-2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-2) 100%);
+    transition: width 1s ease;
+  }
+  .progress-bar-fill.amber {
+    background: linear-gradient(90deg, var(--amber) 0%, #e07b2a 100%);
+  }
+
+  /* ── RELEASE BLOCKS ── */
+  .release-block {
+    margin-bottom: 24px;
+  }
+  .release-block:last-child { margin-bottom: 0; }
+
+  .release-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: white;
+    background: var(--accent);
+    padding: 4px 12px 4px 8px;
+    border-radius: 99px;
+    margin-bottom: 12px;
+  }
+  .release-date.pending {
+    background: var(--amber);
+  }
+  .release-date .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+  }
+
+  .item-list { list-style: none; }
+  .item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 0.5px solid var(--paper-2);
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .item:last-child { border-bottom: none; }
+  .item-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    margin-top: 1px;
+  }
+  .item-icon.done {
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+  .item-icon.pending {
+    background: var(--amber-light);
+    color: var(--amber);
+  }
+  .item-num {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ink-3);
+    min-width: 16px;
+    margin-top: 3px;
+  }
+
+  /* ── CHART SVG AREA ── */
+  .chart-section {
+    background: var(--paper);
+    padding: 32px 48px;
+    border-bottom: 1px solid var(--paper-3);
+  }
+
+  /* ── DONUT ── */
+  .charts-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 0;
+  }
+  .chart-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    border: 0.5px solid var(--paper-3);
+  }
+  .chart-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 16px;
+  }
+  .donut-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .donut-legend {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .legend-val {
+    margin-left: auto;
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  /* ── TIMELINE ── */
+  .timeline-wrap { margin-top: 4px; }
+  .tl-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 0;
+  }
+  .tl-spine {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20px;
+    flex-shrink: 0;
+  }
+  .tl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 3px;
+  }
+  .tl-dot.done   { background: var(--accent); }
+  .tl-dot.soon   { background: var(--amber); }
+  .tl-dot.next   { background: var(--blue); }
+  .tl-line {
+    width: 1.5px;
+    flex: 1;
+    background: var(--paper-3);
+    margin: 4px 0;
+    min-height: 28px;
+  }
+  .tl-body {
+    padding-bottom: 24px;
+    flex: 1;
+  }
+  .tl-date {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 2px;
+  }
+  .tl-label {
+    font-size: 13px;
+    color: var(--ink);
+    font-weight: 500;
+    line-height: 1.4;
+  }
+  .tl-count {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 99px;
+    padding: 2px 8px;
+    margin-top: 4px;
+  }
+  .tl-count.amber { background: var(--amber-light); color: var(--amber); }
+  .tl-count.blue  { background: var(--blue-light); color: var(--blue); }
+
+  /* ── NEXT MILESTONE ── */
+  .milestone-card {
+    background: var(--ink);
+    color: white;
+    border-radius: 12px;
+    padding: 24px 24px 20px;
+    margin-top: 0;
+  }
+  .milestone-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 10px;
+  }
+  .milestone-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: white;
+  }
+  .milestone-items {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .milestone-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+  .milestone-item::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-2);
+    flex-shrink: 0;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: var(--paper);
+    padding: 24px 48px;
+    text-align: center;
+  }
+  .footer p {
+    font-size: 12px;
+    color: var(--ink-3);
+    line-height: 1.8;
+  }
+  .footer strong {
+    color: var(--ink-2);
+  }
+
+  /* ── CHART BAR ── */
+  .bar-chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 12px;
+    height: 90px;
+    margin-top: 8px;
+    padding-bottom: 0;
+  }
+  .bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .bar-fill {
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+    min-height: 4px;
+    position: relative;
+  }
+  .bar-fill.done   { background: var(--accent); }
+  .bar-fill.soon   { background: var(--amber); }
+  .bar-fill.next   { background: var(--blue); }
+  .bar-lbl { font-size: 10px; color: var(--ink-3); text-align: center; line-height: 1.3; }
+  .bar-val { font-size: 11px; font-weight: 600; color: var(--ink); }
+  .bar-axis {
+    display: flex;
+    gap: 12px;
+    margin-top: 6px;
+    border-top: 0.5px solid var(--paper-3);
+    padding-top: 6px;
+  }
+  .bar-axis-lbl {
+    flex: 1;
+    text-align: center;
+    font-size: 10px;
+    color: var(--ink-3);
+    line-height: 1.3;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-date">Mayo 2026<br>Informe mensual</div>
+  <div class="header-tag">Proyecto Solcom · Área de Compras</div>
+  <div class="header-title">Status Report</div>
+  <div class="header-sub">Seguimiento de avances · Backlog priorizado</div>
+</div>
+
+<!-- GREETING -->
+<div class="greeting">
+  <p>Buen día <strong>equipo y gerencia de Compras</strong>,<br>
+  compartimos los avances logrados durante el último mes en el proyecto Solcom, fortaleciendo la operación, trazabilidad y experiencia de usuario de la herramienta.</p>
+</div>
+
+<!-- STATS -->
+<div class="section">
+  <div class="section-label">Resumen ejecutivo</div>
+  <div class="stats">
+    <div class="stat-card">
+      <div class="stat-num" style="color: var(--ink);">11</div>
+      <div class="stat-label">Total backlog</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num green">9</div>
+      <div class="stat-label">Completados</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num amber">1</div>
+      <div class="stat-label">En progreso</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-row">
+      <span class="progress-title">Avance del backlog</span>
+      <span class="progress-pct">82%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" style="width: 82%;"></div>
+    </div>
+  </div>
+
+  <div class="progress-wrap" style="margin-top: 12px;">
+    <div class="progress-row">
+      <span class="progress-title">Próxima liberación (13/05)</span>
+      <span class="progress-pct" style="color: var(--amber);">9%</span>
+    </div>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill amber" style="width: 9%;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHARTS SECTION -->
+<div class="chart-section">
+  <div class="section-label" style="margin-bottom: 16px;">Visualización de datos</div>
+
+  <div class="charts-row">
+
+    <!-- DONUT -->
+    <div class="chart-card">
+      <div class="chart-title">Estado del backlog</div>
+      <div class="donut-wrap">
+        <svg width="90" height="90" viewBox="0 0 90 90" style="flex-shrink:0;">
+          <!-- Total: 11. Completados: 9 (82%), Próximo: 1 (9%), Hito: 1 (9%) -->
+          <!-- Arcos: radio 36, circumference ≈ 226 -->
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#eceae4" stroke-width="14"/>
+          <!-- Completados 82% = 185.3 -->
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#1a5c3a" stroke-width="14"
+            stroke-dasharray="185 226" stroke-dashoffset="0" stroke-linecap="round"
+            transform="rotate(-90 45 45)"/>
+          <!-- Próximo 9% = 20.3, offset = 185 -->
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#b5540a" stroke-width="14"
+            stroke-dasharray="20 226" stroke-dashoffset="-185" stroke-linecap="round"
+            transform="rotate(-90 45 45)"/>
+          <!-- Hito futuro 9% = 20.3, offset = 205 -->
+          <circle cx="45" cy="45" r="36" fill="none" stroke="#1a3f6f" stroke-width="14"
+            stroke-dasharray="18 226" stroke-dashoffset="-206" stroke-linecap="round"
+            transform="rotate(-90 45 45)"/>
+          <text x="45" y="42" text-anchor="middle" font-family="DM Serif Display, serif" font-size="17" fill="#0f1923">9</text>
+          <text x="45" y="55" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="8" fill="#7a8fa0">de 11</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--accent);"></span>
+            Liberados
+            <span class="legend-val">9</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--amber);"></span>
+            En progreso
+            <span class="legend-val">1</span>
+          </div>
+          <div class="legend-item">
+            <span class="legend-dot" style="background: var(--blue);"></span>
+            Hito futuro
+            <span class="legend-val">1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BAR CHART por fecha -->
+    <div class="chart-card">
+      <div class="chart-title">Entregas por fecha</div>
+      <div class="bar-chart">
+        <div class="bar-col">
+          <div class="bar-val">3</div>
+          <div class="bar-fill done" style="height: 70%;"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">5</div>
+          <div class="bar-fill done" style="height: 100%;"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">1</div>
+          <div class="bar-fill soon" style="height: 25%;"></div>
+        </div>
+        <div class="bar-col">
+          <div class="bar-val">2+</div>
+          <div class="bar-fill next" style="height: 45%;"></div>
+        </div>
+      </div>
+      <div class="bar-axis">
+        <div class="bar-axis-lbl">28 abr</div>
+        <div class="bar-axis-lbl">11 may</div>
+        <div class="bar-axis-lbl">13 may</div>
+        <div class="bar-axis-lbl">Hito<br>futuro</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- PUNTOS LIBERADOS 28/04 -->
+<div class="section">
+  <div class="section-label">Puntos liberados</div>
+
+  <div class="release-block">
+    <div class="release-date">
+      <span class="dot"></span>
+      Liberados a productivo · 28 de abril
+    </div>
+    <ul class="item-list">
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">01</span>
+        Requerimiento de adjunto por ítems
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">02</span>
+        Integración SAP materiales
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">03</span>
+        Visualización de descripción del ítem para el solicitante
+      </li>
+    </ul>
+  </div>
+
+  <div class="release-block">
+    <div class="release-date">
+      <span class="dot"></span>
+      Liberados a productivo · 11 de mayo
+    </div>
+    <ul class="item-list">
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">04</span>
+        Marcación de solicitudes: "Al día", "Vencida" y "Cerrado" en columna de tiempo
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">05</span>
+        Estado de SOLPED fallida y visualización del error para comprador y administrador
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">06</span>
+        Visualización para comprador de proveedores a los que fue enviada la solicitud
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">07</span>
+        Ajuste en solicitudes vencidas para permitir aceptar o rechazar
+      </li>
+      <li class="item">
+        <span class="item-icon done">✓</span>
+        <span class="item-num">08</span>
+        Reactivación de solicitudes rechazadas con nueva fecha al ser editadas por el usuario
+      </li>
+    </ul>
+  </div>
+
+  <div class="release-block" style="margin-bottom: 0;">
+    <div class="release-date pending">
+      <span class="dot"></span>
+      Próxima liberación · 13 de mayo
+    </div>
+    <ul class="item-list">
+      <li class="item">
+        <span class="item-icon pending">⏳</span>
+        <span class="item-num">09</span>
+        Cambio de categorías a categorías de compras
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<div class="section">
+  <div class="section-label">Línea de tiempo del proyecto</div>
+  <div class="timeline-wrap">
+
+    <div class="tl-item">
+      <div class="tl-spine">
+        <div class="tl-dot done"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">28 de abril · Entrega 1</div>
+        <div class="tl-label">Primera liberación a productivo</div>
+        <span class="tl-count">3 desarrollos</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-spine">
+        <div class="tl-dot done"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">11 de mayo · Entrega 2</div>
+        <div class="tl-label">Segunda liberación a productivo</div>
+        <span class="tl-count">5 desarrollos</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-spine">
+        <div class="tl-dot soon"></div>
+        <div class="tl-line"></div>
+      </div>
+      <div class="tl-body">
+        <div class="tl-date">13 de mayo · Próxima entrega</div>
+        <div class="tl-label">Cambio de categorías a categorías de compras</div>
+        <span class="tl-count amber">En progreso</span>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-spine">
+        <div class="tl-dot next"></div>
+      </div>
+      <div class="tl-body" style="padding-bottom: 0;">
+        <div class="tl-date">Próximo hito · Por definir</div>
+        <div class="tl-label">Dashboard de gestión + Reportes</div>
+        <span class="tl-count blue">Planeación</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- NEXT MILESTONE -->
+<div class="section" style="border-bottom: none;">
+  <div class="section-label">Próximo hito del proyecto</div>
+  <div class="milestone-card">
+    <div class="milestone-label">Siguiente gran paso</div>
+    <div class="milestone-title">Módulo de reportería y gestión</div>
+    <div class="milestone-items">
+      <div class="milestone-item">Dashboard de gestión para el área de compras</div>
+      <div class="milestone-item">Reportes para administradores y compradores</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Seguimos trabajando y sumando esfuerzos para consolidar este gran proyecto.<br>
+  <strong>Muchas gracias a todos por el apoyo y acompañamiento durante este proceso.</strong></p>
+  <p style="margin-top: 10px; font-size: 11px; color: #b0b8c0;">Proyecto Solcom · Área de Compras · Mayo 2026</p>
+</div>
+
+</body>
+</html>
